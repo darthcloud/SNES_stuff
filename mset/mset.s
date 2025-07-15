@@ -18,13 +18,15 @@
 .segment "ZEROPAGE"
 _ptr:          .res 2 ; shared pointer for C interface
 ppu_post_mode: .res 1
-_input:        .res 20
+_input:        .res 28
 _mouse_index:  .res 1
 _mouse0:       .res 1
 _mouse1:       .res 1
 _mouse2:       .res 1
 _mouse3:       .res 1
 _mouse4:       .res 1
+_mouse5:       .res 1
+_mouse6:       .res 1
 _mouse_y:      .res 1
 _mouse_x:      .res 1
 
@@ -61,7 +63,7 @@ _oam: .res 256
 
 .exportzp _ptr
 .exportzp _input;
-.exportzp _mouse_index, _mouse0, _mouse1, _mouse2, _mouse3, _mouse4, _mouse_y, _mouse_x
+.exportzp _mouse_index, _mouse0, _mouse1, _mouse2, _mouse3, _mouse4, _mouse5, _mouse6, _mouse_y, _mouse_x
 .exportzp _i,_j,_k,_l
 .exportzp _ix,_jx,_kx,_lx
 .exportzp _eix,_ejx,_ekx,_elx
@@ -128,7 +130,7 @@ input_poll_raw_strobed:
 	inx
 	inx
 	inx
-	cpx #20
+	cpx #28
 	bcc @poll_byte
 	rts
 
@@ -192,6 +194,8 @@ _input_poll:
 		sta _mouse2
 		sta _mouse3
 		sta _mouse4
+		sta _mouse5
+		sta _mouse6
 		sta _mouse_x
 		sta _mouse_y
 		rts
@@ -220,6 +224,10 @@ _input_poll:
 		sta _mouse_x
 		lda _input+16, X
 		sta _mouse4
+		lda _input+20, X
+		sta _mouse5
+		lda _input+24, X
+		sta _mouse6
 		rts
 	;
 

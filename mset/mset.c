@@ -34,13 +34,15 @@ extern uint32 eix, ejx, ekx, elx;
 #pragma zpsym("ekx")
 #pragma zpsym("elx")
 
-extern uint8 input[20];
+extern uint8 input[28];
 extern uint8 mouse_index;
 extern uint8 mouse0;
 extern uint8 mouse1;
 extern uint8 mouse2;
 extern uint8 mouse3;
 extern uint8 mouse4;
+extern uint8 mouse5;
+extern uint8 mouse6;
 extern sint8 mouse_y;
 extern sint8 mouse_x;
 #pragma zpsym("input")
@@ -50,6 +52,8 @@ extern sint8 mouse_x;
 #pragma zpsym("mouse2")
 #pragma zpsym("mouse3")
 #pragma zpsym("mouse4")
+#pragma zpsym("mouse5")
+#pragma zpsym("mouse6")
 #pragma zpsym("mouse_y")
 #pragma zpsym("mouse_x")
 
@@ -206,12 +210,12 @@ void test()
 	{
 		oam_pos = 0;
 
-		add_sprite(125+mouse_x,117+mouse_y,0x27);
-		add_sprite(125,117,0x24);
+		add_sprite(125+mouse_x,117+mouse_y,0x27); // Moving cursor
+		add_sprite(125,117,0x24); // Origin
 	
-		add_sprite((2+10)*8,(2+line)*8,0x11);
+		add_sprite((2+14)*8,(2+line)*8,0x11); // Current line pointer
 		ppu_send_addr = 0x2000 + 2 + ((2+line) * 32);
-		ppu_send_count = 10;
+		ppu_send_count = 14;
 		ppu_send[0] = mouse0 >> 4;
 		ppu_send[1] = mouse0 & 0xF;
 		ppu_send[2] = mouse1 >> 4;
@@ -222,8 +226,12 @@ void test()
 		ppu_send[7] = mouse3 & 0xF;
 		ppu_send[8] = mouse4 >> 4;
 		ppu_send[9] = mouse4 & 0xF;
+		ppu_send[10] = mouse5 >> 4;
+		ppu_send[11] = mouse5 & 0xF;
+		ppu_send[12] = mouse6 >> 4;
+		ppu_send[13] = mouse6 & 0xF;
 		++line; if (line >= 24) line = 0;
-		for (i=0; i<10; ++i) ppu_send[i] ^= 0x30; // SNES grey
+		for (i=0; i<14; ++i) ppu_send[i] ^= 0x30; // SNES grey
 		
 		add_hex_sprite(20*8,2*8,mouse0);
 		add_hex_sprite(22*8,3*8,mouse1);
